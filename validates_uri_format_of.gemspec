@@ -23,6 +23,6 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.0}
   
   s.add_dependency("activerecord", [">= 2.3"])
-  s.add_development_dependency('rspec')
+  # s.add_development_dependency('rspec')
   
 end
