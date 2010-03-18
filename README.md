@@ -1,6 +1,13 @@
 # validates\_uri\_format\_of
 
 Rails plugin that provides a `validates_uri_format_of` method to `ActiveRecord` models.
+You can require or disallow certain components of a URI.
+
+## Installation
+
+Just add the following line to your environment.rb:
+
+    config.gem 'validates_uri_format_of'
 
 ## Usage
 
@@ -15,7 +22,7 @@ After installing the plugin, it's used like
 
 ## Features
 
-Take a look in the lib/validates_uri_format_of.rb
+Take a look at the lib/ and test/ directories.
 
 ## Credits and license
 
