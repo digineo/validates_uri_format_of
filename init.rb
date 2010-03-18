@@ -1,1 +1,1 @@
-require 'validates_uri_format_of'
+require 'lib/validates_uri_format_of'
