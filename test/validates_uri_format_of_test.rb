@@ -84,6 +84,12 @@ define_model :url_without_ip,
 define_model :custom_url,
   :message => 'custom message'
 
+define_model :nil_url,
+  :allow_nil => true
+
+define_model :empty_url,
+  :allow_empty => true
+
 class ValidatesUrlFormatOfTest < Test::Unit::TestCase
   
   def test_simple
@@ -178,6 +184,9 @@ class ValidatesUrlFormatOfTest < Test::Unit::TestCase
       'http://example.com/?url=http://example.com',
 #      'http://räksmörgås.nu/',  # IDN
       'http://xn--rksmrgs-5wao1o.nu/'  # Punycode
+
+    #assert_urls_valid :nil_url, nil
+    assert_urls_valid :empty_url, ''
   end
   
   def test_should_reject_invalid_urls

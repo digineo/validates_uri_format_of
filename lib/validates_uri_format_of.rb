@@ -51,7 +51,7 @@ module ValidatesUriFormatOf
     
     configuration.update(attr_names.extract_options!)
     #validates_each(attr_names, configuration) do |record, attr_name, value|
-    validates_each(attr_names) do |record, attr_name, value|
+    validates_each(attr_names, :allow_nil => configuration[:allow_nil], :allow_blank => configuration[:allow_empty]) do |record, attr_name, value|
       begin
         raise(URI::InvalidURIError, "cannot be a #{value.class}") unless [NilClass, String].include?(value.class)
         
