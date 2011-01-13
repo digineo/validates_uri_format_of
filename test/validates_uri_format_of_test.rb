@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'test/unit'
+require 'uri'
 require 'active_record'
 require 'active_support/core_ext/string/inflections'
 require "#{File.dirname(__FILE__)}/../init"
@@ -88,9 +89,17 @@ define_model :nil_url,
   :allow_nil => true
 
 define_model :empty_url,
-  :allow_empty => true
+  :allow_blank => true
 
 class ValidatesUrlFormatOfTest < Test::Unit::TestCase
+  
+  def test_argument_error
+    assert_raises(ArgumentError) do
+      ModelCustomUrl.class_eval do
+        validates_uri_format_of :url, :invalid_option => :invalid
+      end
+    end
+  end
   
   def test_simple
     assert_urls_valid :url_simple,

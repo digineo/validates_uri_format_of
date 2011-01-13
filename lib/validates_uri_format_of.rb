@@ -43,6 +43,28 @@ module ValidatesUriFormatOf
     :on             => :save
   }
   
+  # Merken, welche Optionen überhaupt bereitgestellt werden.
+  # Benötigen wir, um Exceptions zu schmeißen, falls unbekannte
+  # Optionen übergeben werden.
+  KNOWN_OPTIONS = {
+    # Eigene Optionen  -- Wird weiter unten in einer Schleife ergänzt
+    :schemes     => true,
+    :require_fqdn => true,
+    :message      => true,
+    
+    # Optionen von validates_each
+    :on          => true,
+    :allow_nil   => true,
+    :allow_blank => true,
+    :if          => true,
+    :unless      => true
+  }
+  for type_key, type_hash in ValidatesUriFormatOf::COMPONENTS
+    for opt_key, opt_value in type_hash
+      KNOWN_OPTIONS[:"#{type_key}_#{opt_key}"] = true
+    end
+  end
+  
   
   def validates_uri_format_of(*attr_names)
     configuration = {
@@ -50,12 +72,18 @@ module ValidatesUriFormatOf
     }.merge(DEFAULT_CONFIGURATION)
     
     configuration.update(attr_names.extract_options!)
-    #validates_each(attr_names, configuration) do |record, attr_name, value|
-    validates_each(attr_names, :allow_nil => configuration[:allow_nil], :allow_blank => configuration[:allow_empty]) do |record, attr_name, value|
+    
+    for opt in configuration.keys
+      raise ArgumentError, "unknown option :#{opt}" unless KNOWN_OPTIONS[opt]
+    end
+    
+    # Übergebene Parameter rauspicken, die wir direkt validates_each übergeben können.
+    validates_each_configuration = Hash[configuration.select{|k,v| [:on, :allow_nil, :allow_blank, :if, :unless].include?(k) }]
+    validates_each(attr_names, validates_each_configuration) do |record, attr_name, value|
       begin
         raise(URI::InvalidURIError, "cannot be a #{value.class}") unless [NilClass, String].include?(value.class)
         
-        for meth in [:nil, :empty]
+        for meth in [:nil, :empty, :blank]
           if value.send("#{meth}?")
             if configuration[:"allow_#{meth}"]
               next
