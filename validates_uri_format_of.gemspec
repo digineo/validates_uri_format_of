@@ -16,12 +16,11 @@ Gem::Specification.new do |s|
     README.md
     lib/validates_uri_format_of.rb
   )
-  s.homepage         = %q{http://github.com/digineo/validates_uri_format_of}
+  
+  s.test_files       = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.homepage         = %q{https://github.com/digineo/validates_uri_format_of}
   s.rdoc_options     = ["--inline-source", "--charset=UTF-8"]
   s.require_paths    = ["lib"]
-  s.requirements     = %w(rmagick libqt4-ruby libqt4-webkit)
   
   s.add_dependency("activerecord", [">= 2.3"])
-  # s.add_development_dependency('rspec')
-  
 end
